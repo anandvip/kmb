@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Reality of the Platform · Platform Dossier No. 01 · Kotak Cherry</title>
+<style>
+  :root{
+    --ink:#12332B;        /* deep banknote green */
+    --ink-soft:#2E5648;
+    --paper:#F7F5EE;      /* ledger paper */
+    --paper-deep:#EEEBDF;
+    --gold:#B8860B;       /* rupee gold */
+    --rule:#C9C3AE;
+    --alert:#8C3A2B;      /* dossier working accent */
+    --alert-soft:#B0553F;
+    --good:#2F6B3F;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation:none!important;transition:none!important;}
+  }
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size:17px;
+    line-height:1.65;
+  }
+  .mono{font-family:'Courier New', Courier, monospace;}
+
+  /* ---------- Masthead: dossier variant (alert-red band) ---------- */
+  header{
+    border-bottom:3px double var(--alert);
+    padding:2.2rem 1.2rem 1.6rem;
+    text-align:center;
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 30px, rgba(140,58,43,.04) 30px, rgba(140,58,43,.04) 31px),
+      var(--paper);
+  }
+  .eyebrow{
+    font-family:'Courier New', monospace;
+    font-size:.72rem;
+    letter-spacing:.28em;
+    text-transform:uppercase;
+    color:var(--alert);
+  }
+  h1{
+    font-size:clamp(1.9rem, 6vw, 3.1rem);
+    font-weight:700;
+    letter-spacing:-.01em;
+    margin:.5rem 0 .3rem;
+  }
+  h1 .tilt{display:inline-block;color:var(--alert);font-style:italic;}
+  header p.sub{
+    font-style:italic;
+    color:var(--ink-soft);
+    max-width:36rem;
+    margin:0 auto;
+  }
+  header .stamp-verified{
+    display:inline-block;
+    margin-top:1rem;
+    border:2px solid var(--good);
+    color:var(--good);
+    border-radius:4px;
+    padding:.3rem .9rem;
+    font-family:'Courier New', monospace;
+    font-size:.68rem;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    transform:rotate(-1.2deg);
+  }
+
+  main{max-width:46rem;margin:0 auto;padding:0 1.2rem 4rem;}
+
+  section{margin-top:3rem;padding-top:2rem;border-top:1px solid var(--rule);}
+  .folio{
+    font-family:'Courier New', monospace;
+    font-size:.7rem;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--alert);
+    display:block;
+    margin-bottom:.4rem;
+  }
+  h2{font-size:clamp(1.35rem, 4vw, 1.8rem);margin-bottom:1rem;line-height:1.25;}
+  h3.subhead{font-size:1.15rem;margin:1.8rem 0 .8rem;}
+  p{margin-bottom:1rem;}
+  em{color:var(--ink-soft);}
+  strong{color:var(--ink);}
+
+  .note{
+    background:var(--paper-deep);
+    border-left:3px solid var(--gold);
+    padding:.9rem 1.1rem;
+    margin:1.2rem 0;
+    font-size:.95rem;
+  }
+  .note .mono{font-size:.8rem;letter-spacing:.1em;color:var(--gold);text-transform:uppercase;}
+  .note.alert{border-left-color:var(--alert);}
+  .note.alert .mono{color:var(--alert);}
+  .note.good{border-left-color:var(--good);}
+  .note.good .mono{color:var(--good);}
+
+  /* ---------- Stamps ---------- */
+  .stamp-row{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;margin:1.6rem 0;}
+  .stamp{
+    border:2.5px solid var(--ink);
+    border-radius:6px;
+    padding:1rem 1.4rem;
+    text-align:center;
+    transform:rotate(-1.5deg);
+    box-shadow:3px 3px 0 var(--paper-deep);
+    background:var(--paper);
+  }
+  .stamp.red{border-color:var(--alert);transform:rotate(1.2deg);}
+  .stamp .big{font-size:1.7rem;font-weight:700;font-family:'Courier New', monospace;}
+  .stamp.red .big{color:var(--alert);}
+  .stamp .small{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);display:block;}
+
+  /* ---------- Interactive calc card ---------- */
+  .calc-card{
+    border:1.5px solid var(--ink);
+    border-radius:8px;
+    background:var(--paper);
+    padding:1.6rem 1.4rem 2rem;
+    margin:1.6rem 0;
+    box-shadow:5px 5px 0 var(--paper-deep);
+  }
+  .calc-card h3{font-size:1.05rem;text-align:center;margin-bottom:.4rem;}
+  .calc-card .hint{text-align:center;font-size:.85rem;font-style:italic;color:var(--ink-soft);margin-bottom:1.2rem;}
+  .slider-row{max-width:24rem;margin:1rem auto 0;text-align:center;}
+  .slider-row label{
+    display:block;font-family:'Courier New', monospace;font-size:.72rem;
+    letter-spacing:.2em;text-transform:uppercase;margin-bottom:.5rem;color:var(--ink-soft);
+  }
+  input[type=range]{width:100%;accent-color:var(--alert);cursor:pointer;}
+  input[type=range]:focus-visible{outline:3px solid var(--alert);outline-offset:4px;}
+  .readout{
+    display:flex;justify-content:space-between;gap:.6rem;max-width:26rem;
+    margin:1.2rem auto 0;font-family:'Courier New', monospace;font-size:.85rem;flex-wrap:wrap;
+  }
+  .readout div{flex:1;min-width:7rem;text-align:center;}
+  .readout .k{font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);display:block;}
+  .readout .v{font-size:1.15rem;font-weight:700;}
+  .readout .v.loss{color:var(--alert);}
+  .readout .v.keep{color:var(--good);}
+  .verdict{text-align:center;margin-top:1rem;font-style:italic;font-size:.95rem;min-height:1.6em;color:var(--ink-soft);}
+
+  /* ---------- Claim–Clause anchor cards (signature) ---------- */
+  .anchor{
+    border:1.5px solid var(--ink);
+    border-radius:8px;
+    overflow:hidden;
+    margin:1.1rem 0;
+    background:var(--paper);
+  }
+  .anchor .claim{
+    padding:.8rem 1.1rem .6rem;
+    font-weight:700;
+  }
+  .anchor .claim .tag{
+    font-family:'Courier New', monospace;font-size:.62rem;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--ink-soft);display:block;font-weight:400;margin-bottom:.15rem;
+  }
+  .anchor .clause{
+    background:var(--paper-deep);
+    border-top:1px dashed var(--rule);
+    padding:.7rem 1.1rem;
+    font-size:.9rem;
+  }
+  .anchor .clause .ref{
+    font-family:'Courier New', monospace;font-size:.65rem;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--gold);display:block;margin-bottom:.2rem;
+  }
+  .anchor .status{
+    padding:.45rem 1.1rem;
+    font-family:'Courier New', monospace;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;
+    border-top:1px solid var(--rule);
+  }
+  .anchor .status.ok{color:var(--good);}
+  .anchor .status.warn{color:var(--alert);}
+  .anchor .status.new{color:var(--gold);}
+
+  /* ---------- Trust / negotiation blocks ---------- */
+  .trust{background:var(--paper-deep);border-radius:8px;padding:1.4rem 1.3rem;margin-top:1.2rem;}
+  .trust p:last-child{margin-bottom:0;}
+  .detector{border:1.5px dashed var(--ink-soft);border-radius:8px;padding:1.4rem 1.3rem;margin:1.4rem 0;}
+  .detector ol{margin:.6rem 0 .6rem 1.4rem;}
+  .detector li{margin-bottom:.7rem;}
+
+  /* ---------- Removable section band ---------- */
+  .removable{
+    border:2px dashed var(--gold);
+    border-radius:10px;
+    padding:1.6rem 1.3rem;
+    margin-top:3rem;
+    position:relative;
+    background:linear-gradient(rgba(184,134,11,.03), rgba(184,134,11,.03)), var(--paper);
+  }
+  .removable::before{
+    content:"Removable Section · lift out before circulating the Kotak-only edition";
+    position:absolute;
+    top:-0.8em;left:1rem;
+    background:var(--paper);
+    padding:0 .6rem;
+    font-family:'Courier New', monospace;
+    font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);
+  }
+
+  /* ---------- Recall drill ---------- */
+  .drill{border:2px solid var(--ink);border-radius:8px;overflow:hidden;margin:1.4rem 0;}
+  .drill-head{
+    background:var(--ink);color:var(--paper);padding:.7rem 1.2rem;
+    font-family:'Courier New', monospace;font-size:.72rem;letter-spacing:.24em;text-transform:uppercase;
+  }
+  .q{padding:1.1rem 1.2rem;border-bottom:1px solid var(--rule);}
+  .q:last-child{border-bottom:none;}
+  .q p.question{font-weight:700;margin-bottom:.6rem;}
+  .q button{
+    font-family:'Courier New', monospace;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;
+    background:none;border:1.5px solid var(--gold);color:var(--gold);border-radius:4px;
+    padding:.45rem .9rem;cursor:pointer;transition:background .2s, color .2s;
+  }
+  .q button:hover, .q button:focus-visible{background:var(--gold);color:var(--paper);outline:none;}
+  .q .answer{
+    display:none;margin-top:.8rem;padding:.8rem 1rem;background:var(--paper-deep);
+    border-left:3px solid var(--gold);font-size:.95rem;
+  }
+  .q .answer.show{display:block;animation:fadeIn .35s ease;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:none;}}
+
+  footer{
+    border-top:3px double var(--alert);
+    margin-top:3.5rem;padding:1.6rem 1.2rem 2.4rem;text-align:center;
+    font-size:.85rem;color:var(--ink-soft);font-style:italic;
+  }
+  footer .mono{font-style:normal;font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;display:block;margin-top:.6rem;line-height:1.9;}
+</style>
+</head>
+<body>
+
+<header>
+  <span class="eyebrow">Platform Dossier · No. 01 · Due-Diligence Series</span>
+  <h1>The Reality of the <span class="tilt">Platform</span></h1>
+  <p class="sub">Kotak Cherry · Kotak Mahindra Bank Ltd. · ARN-1390. Every claim in this brief is now anchored to the clause of the actual Terms &amp; Conditions that proves it — or corrected in the open.</p>
+  <span class="stamp-verified">Citations verified · 18 Jul 2026</span>
+</header>
+
+<main>
+
+  <!-- ============ ENTRY 01 · VERDICT ============ -->
+  <section>
+    <span class="folio">Entry 01 · The Verdict</span>
+    <h2>The thesis stands — and now it stands on the document itself.</h2>
+    <p>The original brief made a structural claim: a banking-linked distribution platform quietly cross-subsidises "free" services by routing long-term wealth into <strong>Regular mutual fund plans</strong> that carry embedded trail commissions. After reading the uploaded Terms &amp; Conditions line by line, the claim is not merely plausible — <strong>the contract states its own machinery in plain text</strong>. The platform reserves the right to earn commission, brokerage and referral fees; it requires a Power of Attorney or mandate over all investment accounts, present and future; and it walls itself off from liability while binding the client to Mumbai-seated dispute resolution.</p>
+    <p>Two things upgraded in this polish: the two 2026 legal citations have been <strong>independently verified as genuine</strong> (Entry 04), and every assertion now carries its clause anchor (Entry 03) — so this dossier can be handed to anyone, including a branch manager, without a single unsourced sentence in it.</p>
+    <div class="note">
+      <span class="mono">The standing lesson, restated</span><br>
+      An adhesion contract is entity-facing by design — drafted by seasoned counsel to keep the drafting party afloat. But its <strong>costliest clause is not an indemnity wall</strong>. Indemnities are defensive boilerplate, partly neutralised by statute. The costliest clause is the quiet one that reserves the right to earn commission — fully enforceable, silently compounding. The fee hides in the structure, not on the receipt. Same mandi, different crop.
+    </div>
+  </section>
+
+  <!-- ============ ENTRY 02 · THE MATH ============ -->
+  <section>
+    <span class="folio">Entry 02 · The Arithmetic of the Drag</span>
+    <h2>₹3.4 crore, verified to the decimal.</h2>
+    <p>The brief's headline numbers were re-derived from scratch: <strong>₹50,000/month SIP for 30 years</strong>, Direct plan compounding at a 13% effective annual rate versus a Regular plan at 12% (the ~1% trail drag). Monthly compounding at the equivalent monthly rate, contributions at the start of each month.</p>
+    <div class="stamp-row">
+      <div class="stamp">
+        <span class="small">Direct Plan · 13%</span>
+        <span class="big">₹18.8 Cr</span>
+      </div>
+      <div class="stamp red">
+        <span class="small">Regular Plan · 12%</span>
+        <span class="big">₹15.4 Cr</span>
+      </div>
+    </div>
+    <p>The gap — <strong>₹3.4 crore, about 18% of the final corpus</strong> — is the trail commission, compounded. Both figures in the original brief reproduce exactly under this convention. The arithmetic is sound.</p>
+
+    <div class="calc-card">
+      <h3>Feel the drag: drag the slider.</h3>
+      <p class="hint">Same ₹50,000/month, same 30 years. Only the expense drag moves.</p>
+      <div class="slider-row">
+        <label for="dragSlider">Annual expense drag vs. Direct plan (%)</label>
+        <input type="range" id="dragSlider" min="0" max="2" step="0.05" value="1"
+               aria-label="Annual expense ratio drag in percent">
+      </div>
+      <div class="readout">
+        <div><span class="k">Direct corpus</span><span class="v keep">₹18.81 Cr</span></div>
+        <div><span class="k">Your corpus</span><span class="v" id="corpusOut">₹15.40 Cr</span></div>
+        <div><span class="k">Surrendered</span><span class="v loss" id="lossOut">₹3.41 Cr</span></div>
+      </div>
+      <p class="verdict" id="dragVerdict">At 1.00% drag — 18.1% of your final wealth flows to the distribution chain.</p>
+    </div>
+
+    <div class="note good">
+      <span class="mono">Regulatory update · verified 18 Jul 2026</span><br>
+      The brief's reference to a new expense framework is real. The <strong>SEBI (Mutual Funds) Regulations, 2026</strong> — approved at SEBI's board meeting of 17 December 2025, effective <strong>1 April 2026</strong> — replace the single bundled TER with <strong>TER = Base Expense Ratio (BER) + brokerage + regulatory levies + statutory levies</strong>, with statutory charges (GST, STT, stamp duty) moved out and charged on actuals, and BER caps modestly reduced. The Regular-vs-Direct gap survives the reform: for active funds it still runs roughly <strong>0.7%–1.3% per year</strong>. Lower ceilings; same seesaw.
+    </div>
+  </section>
+
+  <!-- ============ ENTRY 03 · CLAIM ↔ CLAUSE ============ -->
+  <section>
+    <span class="folio">Entry 03 · Claim ↔ Clause</span>
+    <h2>Every assertion, pinned to the page that proves it.</h2>
+    <p>This is the polish that matters most. A brief that quotes the counterparty's own contract cannot be waved away. Excerpts below are short verbatim fragments; the full clauses live in the T&amp;C PDF filed alongside this dossier.</p>
+
+    <div class="anchor">
+      <div class="claim"><span class="tag">Brief claimed</span>The platform earns invisible trailing commissions on distributed products.</div>
+      <div class="clause"><span class="ref">T&amp;C · Disclaimers section</span>"Kotak Cherry Platform may earn / reserves the right to earn commission, brokerage, referral fees etc." — and may further "act as a sub-broker/sub-distributor/referral agent for another distributor."</div>
+      <div class="status ok">Confirmed · stated in plain text</div>
+    </div>
+
+    <div class="anchor">
+      <div class="claim"><span class="tag">Brief claimed</span>"Recommended Funds" are commission-bearing Regular plans.</div>
+      <div class="clause"><span class="ref">T&amp;C footer + NRI clause 8</span>The Bank operates as an AMFI-registered distributor (ARN-1390) on every page; the client is deemed to have "been disclosed all the commissions" — upfront or trail — payable to the Bank on recommended schemes. Distribution under an ARN is, by structure, the Regular-plan channel.</div>
+      <div class="status ok">Confirmed · by structure and deemed disclosure</div>
+    </div>
+
+    <div class="anchor">
+      <div class="claim"><span class="tag">Brief claimed</span>Absolute execution control via mandate/POA.</div>
+      <div class="clause"><span class="ref">MF Investment Account · Clause 2</span>Transaction rights require "granting a Power of Attorney (POA) or a mandate" in the Bank's favour — applicable to all Investment Accounts "whether presently existing or to be opened in future."</div>
+      <div class="status warn">Confirmed · wider than the brief stated (covers future accounts too)</div>
+    </div>
+
+    <div class="anchor">
+      <div class="claim"><span class="tag">Brief claimed</span>Client indemnifies the Bank against systemic failures and delays.</div>
+      <div class="clause"><span class="ref">Clause XVIII · Indemnification</span>Client keeps the Bank, service providers, mutual funds and AMCs "free and harmless at all times" — including attorney costs — and the indemnities survive termination.</div>
+      <div class="status ok">Confirmed</div>
+    </div>
+
+    <div class="anchor">
+      <div class="claim"><span class="tag">New finding</span>Fees are one-way; charges are open-ended.</div>
+      <div class="clause"><span class="ref">Disclaimers + MF Clause 22</span>Any fee paid is "non-refundable including in case of deactivation"; the service may be withdrawn "without providing any reason whatsoever and without giving any prior notice"; and the Bank "may levy charges at its sole discretion."</div>
+      <div class="status new">Added in this polish</div>
+    </div>
+
+    <div class="anchor">
+      <div class="claim"><span class="tag">New finding</span>The contract amends itself.</div>
+      <div class="clause"><span class="ref">General + Client Declarations</span>The Bank holds "full liberty and absolute discretion to make necessary changes" to the Agreement; continued use constitutes acceptance of posted changes.</div>
+      <div class="status new">Added in this polish</div>
+    </div>
+
+    <div class="anchor">
+      <div class="claim"><span class="tag">Brief claimed</span>Disputes are pushed to Mumbai arbitration.</div>
+      <div class="clause"><span class="ref">Clause XX · Arbitration, Governing Law and Jurisdiction</span>Arbitration under the 1996 Act, with the "exclusive jurisdiction of the competent courts located in the city of Mumbai" — <strong>while the Bank reserves the right</strong>, if it "so thinks fit," to "institute proceedings against Client in any other court."</div>
+      <div class="status warn">Confirmed + asymmetry found: you are bound to Mumbai; the Bank is bound nowhere</div>
+    </div>
+
+    <div class="anchor">
+      <div class="claim"><span class="tag">New finding</span>Data consent is broader than an investment platform needs.</div>
+      <div class="clause"><span class="ref">Clauses VIII &amp; X</span>Consent to share "personal, transactional and behavioural" information with group companies, vendors and business partners for promotion and analytics — with contact permitted even if you sit on the Do-Not-Call registry. (An unsubscribe route exists; exercise it on day one.)</div>
+      <div class="status new">Added in this polish</div>
+    </div>
+
+    <div class="anchor">
+      <div class="claim"><span class="tag">New finding · drafting quality</span>The Aadhaar consent clause was never finished.</div>
+      <div class="clause"><span class="ref">Clause XI</span>The live legal text still contains unfilled template placeholders — "[Name of the Customer]" and "[Purpose]" — and routes the irrevocable Aadhaar-fetch authorisation to <strong>Kotak Alternate Asset Managers Ltd.</strong>, an entity with no obvious role in a mutual-fund distribution flow.</div>
+      <div class="status warn">A precise, documentable question for compliance — not a rhetorical one</div>
+    </div>
+  </section>
+
+  <!-- ============ ENTRY 04 · VERIFICATION LOG ============ -->
+  <section>
+    <span class="folio">Entry 04 · The Verification Log</span>
+    <h2>Both 2026 citations were challenged. Both held.</h2>
+    <p>Per the 3-source rule, the two most audacious claims in the original brief — a 2026 regulatory framework and a 2026 Supreme Court ruling — were treated as unverified until independently confirmed. This log is kept visible, in the house style: the checking is part of the record.</p>
+    <div class="note good">
+      <span class="mono">Verified · SEBI BER framework</span><br>
+      SEBI (Mutual Funds) Regulations, 2026 — board-approved 17 Dec 2025, effective 1 Apr 2026. TER redefined as BER + brokerage + regulatory levies + statutory levies. Fund houses (ICICI Prudential, Aditya Birla Sun Life, Quant and others) issued addendums revising expense structures from 1 April 2026. <strong>The brief's claim stands.</strong>
+    </div>
+    <div class="note good">
+      <span class="mono">Verified · T.K.A. Padmanabhan v. Abhiyan Cooperative Group Housing Society Ltd.</span><br>
+      Real, and recent: <strong>2026 INSC 649</strong>, Supreme Court, decided <strong>4 June 2026</strong>, Justices Vikram Nath and V. Mohana. Held: an arbitration clause does not, by itself, oust consumer-forum jurisdiction; once a complaint is admitted, it cannot be diverted to arbitration — a private contractual clause cannot defeat a statutory remedy expressly made <em>additional</em> to other remedies. <strong>The brief's claim stands.</strong>
+    </div>
+    <div class="note alert">
+      <span class="mono">Two refinements, kept visible</span><br>
+      <strong>(1)</strong> Padmanabhan is the newest link in a settled chain, not a lone landmark. Carry the whole line when escalating: <em>Fair Air Engineers v. N.K. Modi</em> (1996) → <em>Thirumurugan Cooperative</em> (2004) → <em>National Seeds Corp.</em> (2012) → <em>Emaar MGF Land Ltd. v. Aftab Singh</em> (2019) → <em>Padmanabhan</em> (2026). A chain is harder to argue with than a case. <strong>(2)</strong> The original brief's phrase "strict clawback clauses on distributor payouts" is not confirmed as a feature of the notified 2026 framework; the confirmed elements are the BER separation, reduced caps, statutory levies on actuals, and NFO costs borne by AMCs. The phrase has been retired from this dossier — claims stay inside what is verified.
+    </div>
+  </section>
+
+  <!-- ============ ENTRY 05 · NEGOTIABILITY ============ -->
+  <section>
+    <span class="folio">Entry 05 · How Negotiable, Really</span>
+    <h2>You cannot redline it. You can still outflank it.</h2>
+    <p>The original brief's answer — <strong>0% negotiable at the branch</strong> — is correct. This is a standard-form adhesion contract: take it or leave it, no struck clauses, no counter-drafts. But "non-negotiable" is not the same as "all-powerful." Four levers remain live, in descending order of force:</p>
+    <div class="detector">
+      <ol>
+        <li><strong>The statutory floor survives the signature.</strong> No clause can contract you out of the Consumer Protection Act — the Padmanabhan line settles that the consumer forum stays open despite Clause XX. Conduct obligations under SEBI and AMFI rules likewise apply to the Bank regardless of what you signed.</li>
+        <li><strong>Rights already inside the contract, exercisable on day one.</strong> The marketing-communications unsubscribe (Clause VIII); online account closure; termination of the MF service by written notice, effective within seven working days.</li>
+        <li><strong>The grievance ladder, in order.</strong> Written complaint to <span class="mono">say.hello@kotak.com</span> (Clause XVI) → the Bank's nodal officer → RBI Banking Ombudsman for banking-service deficiency, or SEBI SCORES / AMFI for the distribution activity → District Consumer Commission. Each rung creates a paper record the next rung requires.</li>
+        <li><strong>The real negotiation is the alternative.</strong> Against a take-it-or-leave-it contract, leverage is not a better clause — it is a credible exit. The Direct route (removable section below) is that exit.</li>
+      </ol>
+    </div>
+    <p style="font-size:.92rem;"><em>One boundary, stated plainly: this dossier is study material, not legal advice. If a live dispute ever arises, the escalation ladder above buys time and record — a lawyer's review buys judgment.</em></p>
+  </section>
+
+  <!-- ============ ENTRY 06 · ESCALATION QUESTIONS ============ -->
+  <section>
+    <span class="folio">Entry 06 · The Escalation Questions, Rebuilt</span>
+    <h2>Three questions the branch cannot answer — by design.</h2>
+    <p>The originals had the right instinct: ask in writing, force escalation. Two of the three have been strengthened; the reasoning for each change is noted, in the open. The expected outcome is unchanged — a branch manager is not authorised to answer any of these, and the escalation itself is the result.</p>
+
+    <h3 class="subhead">Question 1 · The commission number — now a judo move</h3>
+    <div class="note">
+      <span class="mono">Ask in writing</span><br>
+      "Your own Terms &amp; Conditions deem me to have 'been disclosed all the commissions' — upfront and trail — payable to the Bank on the schemes you recommend. Please substantiate that representation: provide, in writing, the scheme-wise annualised trail commission percentage Kotak (ARN-1390) receives on each fund on the 'Recommended' list, consistent with your published commission-disclosure page and the post-April-2026 BER framework."
+    </div>
+    <p style="font-size:.92rem;"><em>Why it improved: the original asked them to reveal a number. This version asks them to <strong>substantiate a representation their own contract already makes</strong>. And it has a built-in reconciliation check — the half-yearly Consolidated Account Statement discloses the actual commission paid against your folios. Their written answer must match your CAS. That is the 3-source rule wearing a suit.</em></p>
+
+    <h3 class="subhead">Question 2 · The Direct-plan admission — rebuilt</h3>
+    <div class="note">
+      <span class="mono">Ask in writing</span><br>
+      "Your Declarations state the Bank acts with 'the highest standards of integrity and fairness.' In that spirit, a factual yes/no: does Kotak Cherry offer the Direct plan of the same schemes it recommends? If not, please confirm in writing that every mutual fund transacted on the platform is a Regular plan carrying an embedded distributor commission, and that the identical scheme is available to me elsewhere at a lower expense ratio."
+    </div>
+    <p style="font-size:.92rem;"><em>Why it was rebuilt: the original's "how does this align with my best financial interest?" invites the prepared deflection — the T&amp;C itself declares the Bank a distributor, not an adviser, with advisory expressly segregated. A fiduciary question lets them answer honestly and unhelpfully. A yes/no about Direct-plan availability cannot be deflected: either answer concedes the brief's thesis.</em></p>
+
+    <h3 class="subhead">Question 3 · Arbitration — upgraded with the asymmetry and the chain</h3>
+    <div class="note">
+      <span class="mono">Ask in writing</span><br>
+      "Clause XX of your Terms binds me to arbitration with exclusive Mumbai jurisdiction — while reserving the Bank's right to sue me in any other court it thinks fit. Given the settled position of the Supreme Court — most recently <em>T.K.A. Padmanabhan v. Abhiyan Cooperative Group Housing Society Ltd.</em>, 2026 INSC 649, following <em>Emaar MGF Land Ltd. v. Aftab Singh</em> (2019) — that an arbitration clause does not oust the jurisdiction of consumer fora, do you acknowledge that my statutory right to approach the Consumer Commission remains fully intact?"
+    </div>
+    <p style="font-size:.92rem;"><em>What changed: the coincidence resolved itself — the draft's placeholder "Clause XX" turns out to be the clause's actual number in the executed T&amp;C. The one-sided sue-anywhere carve-out was added because it is the single most persuasive line to read aloud to a compliance officer. And the citation now carries the precedent chain, verified.</em></p>
+  </section>
+
+  <!-- ==================================================================
+       BEGIN REMOVABLE SECTION
+       Lift everything between these comment markers to produce the
+       Kotak-only edition of this dossier.
+       ================================================================== -->
+  <section class="removable" id="direct-route">
+    <span class="folio" style="color:var(--gold);">Entry R · The Direct Route</span>
+    <h2>Where the same rupee compounds without the toll gate.</h2>
+
+    <h3 class="subhead">First principle: the platform is a pipe, not a vault</h3>
+    <p>Mutual fund units purchased in non-demat mode live in <strong>your folio with the AMC</strong>, maintained at the registrar (CAMS or KFintech) — not inside any app. If a platform shuts down tomorrow, the units are untouched and redemptions still pay into your registered bank account. This is the capital-security floor of the MF world: <strong>custody sits with the AMC/RTA; the app only carries instructions.</strong> The one exception is demat-mode platforms (Zerodha Coin), which add a depository layer and a broker dependency.</p>
+
+    <h3 class="subhead">The selection lens · five gates, adapted</h3>
+    <div class="detector">
+      <ol>
+        <li><strong>Direct-only?</strong> The platform must transact Direct plans exclusively — no Regular-plan default anywhere in the flow.</li>
+        <li><strong>Standalone or broker-tied?</strong> A platform needing a demat/trading account adds annual charges (~₹300/yr) and an extra dependency.</li>
+        <li><strong>Exit path?</strong> Non-demat folios are fully portable: leave any app and continue transacting via MFCentral or the AMC directly. Demat units need a broker to move.</li>
+        <li><strong>Cross-sell pressure?</strong> "Everything apps" monetise attention; watch how hard the interface pushes stocks, F&amp;O, loans, insurance.</li>
+        <li><strong>Household fit?</strong> Onboarding for a second PAN in the family, and a consolidated family view, matter for multi-PAN structures.</li>
+      </ol>
+    </div>
+
+    <h3 class="subhead">The shortlist · July 2026</h3>
+    <div class="anchor">
+      <div class="claim"><span class="tag">Independent · no demat</span>Kuvera</div>
+      <div class="clause">Standalone Direct-plan platform — PAN plus bank account, no broker account. Revenue from premium features, not fund commissions. Its consolidated <strong>family portfolio view</strong> (spouse and minor accounts under one login) is the feature users cite for staying. Reported friction: occasional UPI payment failures near NAV cut-off.</div>
+      <div class="status ok">Strong fit for a multi-PAN household</div>
+    </div>
+    <div class="anchor">
+      <div class="claim"><span class="tag">Independent · no demat</span>Groww (MF section)</div>
+      <div class="clause">Direct plans without a demat account; the MF flow is standalone even though the app has grown into an everything-platform (stocks, F&amp;O, IPOs). Polished UX; correspondingly heavier cross-sell surface.</div>
+      <div class="status ok">Fine, if gate 4 is watched</div>
+    </div>
+    <div class="anchor">
+      <div class="claim"><span class="tag">Broker-tied · demat mode</span>Zerodha Coin</div>
+      <div class="clause">Commission-free Direct plans, but requires an active Zerodha trading + demat account (~₹300/yr maintenance) and holds units in demat. Best when a Zerodha equity relationship already exists and single-view tax reporting matters.</div>
+      <div class="status warn">Adds a depository layer — weigh gate 3</div>
+    </div>
+    <div class="anchor">
+      <div class="claim"><span class="tag">RTA utility · the ground truth</span>MFCentral</div>
+      <div class="clause">Jointly operated by CAMS and KFintech — the registrars themselves. Folio view across all AMCs, CAS downloads, and <strong>switch-to-Direct requests</strong> for existing Regular holdings. Not a full SIP platform; it is the MF world's equivalent of the exchange trade report — the structural layer beneath every app.</div>
+      <div class="status ok">Keep as the verification and migration layer regardless of app choice</div>
+    </div>
+    <div class="anchor">
+      <div class="claim"><span class="tag">Most structural of all</span>AMC websites, directly</div>
+      <div class="clause">Buying the Direct plan on the fund house's own site removes every intermediate layer. Clunkier across multiple AMCs, but nothing sits between you and the folio.</div>
+      <div class="status ok">The zero-intermediary baseline</div>
+    </div>
+
+    <div class="note">
+      <span class="mono">The 3-source rule applies to platforms too</span><br>
+      Platforms change business models; features and pricing above were verified as of <strong>July 2026</strong> and must be re-verified at onboarding — current pricing page, current terms, and one independent review, before the first rupee moves. The action plan from the original brief stands: <strong>bank as utility; wealth generation elsewhere; every SIP in a Direct plan.</strong>
+    </div>
+  </section>
+  <!-- ==================================================================
+       END REMOVABLE SECTION
+       ================================================================== -->
+
+  <!-- ============ ENTRY 07 · RECALL DRILL ============ -->
+  <section>
+    <span class="folio">Entry 07 · Recall Drill</span>
+    <h2>Let it settle. Then test the settling.</h2>
+    <p>Answer aloud before revealing — the retrieval effort is what builds the memory. Return tomorrow, then in a week.</p>
+
+    <div class="drill">
+      <div class="drill-head">Retrieval Practice · 6 Questions</div>
+
+      <div class="q">
+        <p class="question">1. Which single clause in the Kotak T&amp;C is the true cost centre — and why do the indemnity walls matter less than they look?</p>
+        <button onclick="reveal(this)" aria-expanded="false">Reveal answer</button>
+        <div class="answer">The quiet clause reserving the right to earn <strong>commission, brokerage and referral fees</strong>. Indemnities are defensive boilerplate, partly neutralised by statute (consumer fora stay open regardless). The commission clause is offensive, fully enforceable, and <strong>compounds</strong> — ₹3.4 crore over 30 years on a ₹50k SIP.</div>
+      </div>
+
+      <div class="q">
+        <p class="question">2. ₹50,000/month for 30 years: what does a 1% expense drag cost, in rupees and as a share of final wealth?</p>
+        <button onclick="reveal(this)" aria-expanded="false">Reveal answer</button>
+        <div class="answer"><strong>₹3.4 crore — about 18% of the final corpus</strong> (₹18.8 Cr Direct vs ₹15.4 Cr Regular). Verified by independent recalculation under the effective-annual convention.</div>
+      </div>
+
+      <div class="q">
+        <p class="question">3. Why can Clause XX's Mumbai arbitration mandate not lock you out of consumer court?</p>
+        <button onclick="reveal(this)" aria-expanded="false">Reveal answer</button>
+        <div class="answer">Because the consumer remedy is <strong>statutory and expressly additional</strong> — a private contract cannot defeat it. Settled by a chain of Supreme Court rulings ending, most recently, in <strong>T.K.A. Padmanabhan (2026 INSC 649)</strong>: an arbitration clause does not oust consumer-forum jurisdiction, and an admitted complaint cannot be diverted.</div>
+      </div>
+
+      <div class="q">
+        <p class="question">4. If a Direct-plan app shuts down tomorrow, where are your mutual fund units?</p>
+        <button onclick="reveal(this)" aria-expanded="false">Reveal answer</button>
+        <div class="answer">Safe in <strong>your folio with the AMC, at the registrar (CAMS/KFintech)</strong>. The app is a pipe, not a vault — redemptions still pay to your registered bank account. Exception: demat-mode holdings (Coin) sit behind a depository/broker layer.</div>
+      </div>
+
+      <div class="q">
+        <p class="question">5. What did the Aadhaar clause reveal about the contract's drafting — and which entity does the consent actually name?</p>
+        <button onclick="reveal(this)" aria-expanded="false">Reveal answer</button>
+        <div class="answer">It still contains <strong>unfilled template placeholders</strong> — "[Name of the Customer]" and "[Purpose]" — in a live legal document, and routes the irrevocable Aadhaar-fetch consent to <strong>Kotak Alternate Asset Managers Ltd.</strong>, an entity with no obvious role in MF distribution. A precise, documentable compliance question.</div>
+      </div>
+
+      <div class="q">
+        <p class="question">6. What is the asymmetry hidden inside Clause XX?</p>
+        <button onclick="reveal(this)" aria-expanded="false">Reveal answer</button>
+        <div class="answer">The client is bound to <strong>exclusive Mumbai jurisdiction</strong> — while the Bank reserves the right to institute proceedings against the client in <strong>any other court it thinks fit</strong>. One party locked in place; the other free to choose the battlefield.</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  "The fee hides in the structure, not on the receipt."
+  <span class="mono">
+    Platform Dossier · Personal study record · Not investment or legal advice<br>
+    Sources: uploaded Kotak Cherry Terms &amp; Conditions (ARN-1390) · SEBI (Mutual Funds) Regulations, 2026 · T.K.A. Padmanabhan v. Abhiyan Coop. GHS Ltd., 2026 INSC 649 · Verified 18 Jul 2026
+  </span>
+</footer>
+
+<script>
+  /* ---- Expense-drag calculator ---- */
+  function fv(annual){
+    var r = Math.pow(1 + annual, 1/12) - 1;
+    return 50000 * ((Math.pow(1 + r, 360) - 1) / r) * (1 + r);
+  }
+  var DIRECT = fv(0.13);
+  var dragSlider = document.getElementById('dragSlider');
+  var corpusOut = document.getElementById('corpusOut');
+  var lossOut = document.getElementById('lossOut');
+  var dragVerdict = document.getElementById('dragVerdict');
+
+  function fmtCr(v){ return '₹' + (v / 1e7).toFixed(2) + ' Cr'; }
+
+  function updateDrag(){
+    var d = parseFloat(dragSlider.value);
+    var corpus = fv(0.13 - d/100);
+    var loss = DIRECT - corpus;
+    var pct = (loss / DIRECT) * 100;
+    corpusOut.textContent = fmtCr(corpus);
+    lossOut.textContent = fmtCr(loss);
+    if (d === 0){
+      dragVerdict.textContent = 'Zero drag — the full compounding is yours. This is the Direct plan.';
+    } else {
+      dragVerdict.textContent = 'At ' + d.toFixed(2) + '% drag — ' + pct.toFixed(1) + '% of your final wealth flows to the distribution chain.';
+    }
+  }
+  dragSlider.addEventListener('input', updateDrag);
+  updateDrag();
+
+  /* ---- Recall drill ---- */
+  function reveal(btn){
+    var ans = btn.nextElementSibling;
+    var showing = ans.classList.toggle('show');
+    btn.setAttribute('aria-expanded', showing);
+    btn.textContent = showing ? 'Hide answer' : 'Reveal answer';
+  }
+</script>
+
+</body>
+</html>
