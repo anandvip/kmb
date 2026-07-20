@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The NBFC Ledger — A book on India's regulated credit markets</title>
+<meta name="description" content="A field guide to India's regulated credit markets — for investors done choosing between a 7% FD and a stock-market gamble. Chapter 3 is open for review.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --vault:#14171B;
+    --vault-soft:#1D2126;
+    --vault-line: rgba(237,230,213,0.10);
+    --paper:#EDE6D5;
+    --paper-soft:#E3DBC5;
+    --paper-line: rgba(36,32,25,0.14);
+    --ink:#242019;
+    --ink-soft:#5A5346;
+    --off:#F4EFE2;
+    --brass:#BE8F4E;
+    --brass-deep:#8C6A38;
+    --verdigris:#71917C;
+    --rust:#A24E39;
+    --serif: "Fraunces", Georgia, serif;
+    --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    font-family:var(--sans);
+    background:var(--paper);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+  }
+  img,svg{ display:block; max-width:100%; }
+  a{ color:inherit; }
+  ::selection{ background:var(--brass); color:var(--vault); }
+  :focus-visible{ outline:2px solid var(--brass); outline-offset:3px; }
+
+  .wrap{ max-width:920px; margin:0 auto; padding:0 1.75rem; }
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:0.72rem;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    font-weight:500;
+  }
+
+  /* ---------- reveal-on-scroll ---------- */
+  .reveal{ opacity:0; transform:translateY(14px); transition:opacity .7s ease, transform .7s ease; }
+  .reveal.in-view{ opacity:1; transform:translateY(0); }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    .reveal{ opacity:1; transform:none; transition:none; }
+  }
+
+  /* ---------- mini nav ---------- */
+  .mini-nav{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0.9rem 1.75rem;
+    background:rgba(20,23,27,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--vault-line);
+    transform:translateY(-100%);
+    transition:transform .35s ease;
+  }
+  .mini-nav.visible{ transform:translateY(0); }
+  .mini-nav .mark{
+    font-family:var(--serif); font-weight:600; font-size:1.05rem; color:var(--off);
+    letter-spacing:0.01em;
+  }
+  .mini-nav .mark span{ color:var(--brass); }
+  .btn{
+    display:inline-flex; align-items:center; gap:0.5rem;
+    font-family:var(--mono); font-size:0.78rem; letter-spacing:0.06em; text-transform:uppercase;
+    font-weight:500;
+    padding:0.65rem 1.15rem;
+    border-radius:3px;
+    text-decoration:none;
+    border:1px solid transparent;
+    transition:background .2s ease, color .2s ease, border-color .2s ease, transform .15s ease;
+    cursor:pointer;
+  }
+  .btn:hover{ transform:translateY(-1px); }
+  .btn-brass{ background:var(--brass); color:var(--vault); }
+  .btn-brass:hover{ background:var(--off); }
+  .btn-ghost{ border-color:var(--vault-line); color:var(--off); background:transparent; }
+  .btn-ghost:hover{ border-color:var(--brass); color:var(--brass); }
+  .btn-ink{ border-color:var(--paper-line); color:var(--ink); }
+  .btn-ink:hover{ border-color:var(--brass-deep); color:var(--brass-deep); }
+
+  /* ---------- hero ---------- */
+  .hero{
+    background:var(--vault); color:var(--off);
+    padding:7.5rem 0 5rem;
+    position:relative;
+    border-bottom:1px solid var(--vault-line);
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      radial-gradient(ellipse 700px 400px at 15% 0%, rgba(190,143,78,0.10), transparent 60%),
+      radial-gradient(ellipse 600px 500px at 90% 100%, rgba(113,145,124,0.08), transparent 60%);
+    pointer-events:none;
+  }
+  .hero .wrap{ position:relative; }
+  .hero .eyebrow{ color:var(--brass); margin-bottom:1.4rem; }
+  .hero h1{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:clamp(2.7rem, 6.4vw, 5.2rem);
+    line-height:1.02;
+    margin:0 0 1.3rem;
+    letter-spacing:-0.01em;
+  }
+  .hero h1 em{ font-style:italic; font-weight:400; color:var(--brass); }
+  .hero .tagline{
+    font-size:clamp(1.05rem, 2vw, 1.3rem);
+    line-height:1.6;
+    max-width:34rem;
+    color:rgba(244,239,226,0.82);
+    margin:0 0 2.6rem;
+  }
+  .hero .cta-row{ display:flex; flex-wrap:wrap; gap:0.9rem; align-items:center; }
+  .hero .status-line{
+    margin-top:2.6rem;
+    font-family:var(--mono); font-size:0.76rem; color:rgba(244,239,226,0.5);
+    letter-spacing:0.04em;
+  }
+  .hero .status-line .dot{ color:var(--verdigris); }
+
+  /* ---------- premise ---------- */
+  .premise{ padding:5.5rem 0 4.5rem; border-bottom:1px solid var(--paper-line); }
+  .premise .eyebrow{ color:var(--brass-deep); margin-bottom:1rem; }
+  .premise h2{
+    font-family:var(--serif); font-weight:600; font-size:clamp(1.8rem, 4vw, 2.6rem);
+    line-height:1.12; margin:0 0 1.8rem; max-width:26rem;
+  }
+  .premise .lede{
+    font-family:var(--serif); font-style:italic; font-weight:400;
+    font-size:1.3rem; line-height:1.55; color:var(--ink); max-width:38rem;
+    margin:0 0 1.8rem;
+  }
+  .premise p{ font-size:1.05rem; line-height:1.75; color:var(--ink-soft); max-width:38rem; margin:0 0 1.3rem; }
+  .flag{
+    display:inline-flex; align-items:center; gap:0.5rem;
+    font-family:var(--mono); font-size:0.75rem; letter-spacing:0.04em;
+    color:var(--rust); border:1px solid rgba(162,78,57,0.3); background:rgba(162,78,57,0.07);
+    padding:0.35rem 0.7rem; border-radius:3px; margin:0.4rem 0 1.6rem;
+  }
+
+  /* ---------- strata ---------- */
+  .strata{ background:var(--vault); color:var(--off); padding:5.5rem 0 6rem; border-bottom:1px solid var(--vault-line); }
+  .strata .eyebrow{ color:var(--verdigris); margin-bottom:1rem; }
+  .strata h2{
+    font-family:var(--serif); font-weight:600; font-size:clamp(1.8rem, 4vw, 2.6rem);
+    line-height:1.12; margin:0 0 0.9rem; max-width:26rem;
+  }
+  .strata .sub{ color:rgba(244,239,226,0.65); max-width:32rem; line-height:1.65; margin-bottom:3.2rem; font-size:1rem; }
+
+  .pyramid{ display:flex; flex-direction:column; align-items:center; gap:4px; }
+  .band{
+    width:100%;
+    border-radius:4px;
+    padding:1.1rem 1.4rem;
+    display:flex; flex-direction:column; gap:0.35rem;
+    transition:transform .25s ease;
+  }
+  .band:hover{ transform:translateY(-2px); }
+  .band-base{ max-width:100%; background:var(--vault-soft); border:1px solid var(--vault-line); }
+  .band-mid{ max-width:70%; background:var(--vault-soft); border:1px solid var(--vault-line); }
+  .band-upper{
+    max-width:42%; background:linear-gradient(135deg, var(--brass) 0%, var(--brass-deep) 100%);
+    color:var(--vault); border:1px solid var(--brass);
+    box-shadow:0 12px 32px -14px rgba(190,143,78,0.55);
+  }
+  .band .label{ font-family:var(--mono); font-size:0.68rem; letter-spacing:0.1em; text-transform:uppercase; opacity:0.75; }
+  .band .figure{ font-family:var(--serif); font-weight:600; font-size:1.15rem; }
+  .band-upper .figure{ font-size:1.2rem; }
+  .band .names{ font-family:var(--mono); font-size:0.72rem; opacity:0.85; margin-top:0.1rem; }
+  .band-upper .names{ opacity:0.9; }
+  .apex-link{
+    margin-top:0.5rem; align-self:flex-start;
+    font-family:var(--mono); font-size:0.72rem; font-weight:600; text-decoration:none;
+    color:var(--vault); border-bottom:1px solid var(--vault);
+    padding-bottom:1px;
+  }
+  .apex-link:hover{ opacity:0.7; }
+  .apex-caption{
+    text-align:center; margin-top:1.6rem; font-family:var(--mono); font-size:0.72rem;
+    color:rgba(244,239,226,0.45); letter-spacing:0.04em;
+  }
+
+  /* ---------- chapters / ledger ---------- */
+  .chapters{ padding:5.5rem 0; border-bottom:1px solid var(--paper-line); }
+  .chapters .eyebrow{ color:var(--brass-deep); margin-bottom:1rem; }
+  .chapters h2{
+    font-family:var(--serif); font-weight:600; font-size:clamp(1.8rem, 4vw, 2.6rem);
+    margin:0 0 2.6rem; max-width:26rem; line-height:1.12;
+  }
+  .ledger{ border-top:1px solid var(--paper-line); }
+  .ledger-row{
+    display:grid; grid-template-columns:3.5rem 1fr auto; gap:1.2rem; align-items:center;
+    padding:1.35rem 0; border-bottom:1px solid var(--paper-line);
+  }
+  .ledger-row .folio{ font-family:var(--mono); font-size:0.85rem; color:var(--ink-soft); }
+  .ledger-row .theme-name{ font-family:var(--serif); font-size:1.15rem; font-weight:500; margin:0 0 0.2rem; }
+  .ledger-row .theme-desc{ font-size:0.9rem; color:var(--ink-soft); line-height:1.5; max-width:30rem; }
+  .pill{
+    font-family:var(--mono); font-size:0.68rem; letter-spacing:0.06em; text-transform:uppercase;
+    padding:0.4rem 0.75rem; border-radius:20px; white-space:nowrap; text-decoration:none;
+    border:1px solid var(--paper-line); color:var(--ink-soft);
+  }
+  .pill-open{
+    background:var(--verdigris); color:var(--off); border-color:var(--verdigris); font-weight:600;
+    transition:background .2s ease;
+  }
+  .pill-open:hover{ background:#5d7a67; }
+
+  /* ---------- excerpts ---------- */
+  .excerpts{ background:var(--vault); color:var(--off); padding:5.5rem 0; border-bottom:1px solid var(--vault-line); }
+  .excerpts .eyebrow{ color:var(--brass); margin-bottom:1rem; }
+  .excerpts h2{
+    font-family:var(--serif); font-weight:600; font-size:clamp(1.8rem, 4vw, 2.6rem);
+    margin:0 0 3rem; max-width:26rem; line-height:1.12;
+  }
+  .quote-block{ border-left:2px solid var(--brass); padding-left:1.6rem; margin-bottom:2.8rem; max-width:38rem; }
+  .quote-block:last-child{ margin-bottom:0; }
+  .quote-block p{
+    font-family:var(--serif); font-style:italic; font-weight:400;
+    font-size:clamp(1.15rem, 2.2vw, 1.5rem); line-height:1.55; margin:0 0 0.7rem;
+  }
+  .quote-block .attr{ font-family:var(--mono); font-size:0.72rem; color:rgba(244,239,226,0.5); letter-spacing:0.05em; }
+  .quote-big p{ font-size:clamp(1.6rem, 3.4vw, 2.3rem); font-weight:500; font-style:normal; line-height:1.28; }
+
+  /* ---------- review cta ---------- */
+  .review-cta{ padding:6rem 0; text-align:center; border-bottom:1px solid var(--paper-line); }
+  .review-cta h2{
+    font-family:var(--serif); font-weight:600; font-size:clamp(1.9rem, 4.4vw, 2.8rem);
+    margin:0 auto 1rem; max-width:28rem; line-height:1.15;
+  }
+  .review-cta p{ font-size:1.02rem; line-height:1.7; color:var(--ink-soft); max-width:30rem; margin:0 auto 2.2rem; }
+  .review-cta .steps{
+    display:flex; justify-content:center; gap:2.4rem; flex-wrap:wrap;
+    margin:2.6rem 0 0.5rem; font-family:var(--mono); font-size:0.78rem; color:var(--ink-soft);
+  }
+  .review-cta .steps span{ color:var(--brass-deep); font-weight:600; }
+
+  /* ---------- author ---------- */
+  .author{ padding:5.5rem 0 6rem; }
+  .author .eyebrow{ color:var(--brass-deep); margin-bottom:1rem; }
+  .author-card{
+    display:flex; gap:1.6rem; align-items:flex-start; max-width:38rem;
+    padding-top:0.5rem;
+  }
+  .author-mark{
+    flex:0 0 auto; width:3.4rem; height:3.4rem; border-radius:50%;
+    background:var(--vault); color:var(--brass);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--serif); font-weight:600; font-size:1.3rem;
+  }
+  .author-card p{ font-size:1.02rem; line-height:1.75; color:var(--ink-soft); margin:0 0 0.9rem; }
+  .author-card .placeholder-note{
+    font-family:var(--mono); font-size:0.72rem; color:var(--rust); background:rgba(162,78,57,0.07);
+    border:1px solid rgba(162,78,57,0.25); padding:0.6rem 0.85rem; border-radius:4px; margin-top:0.6rem;
+    line-height:1.55;
+  }
+
+  /* ---------- footer ---------- */
+  .site-footer{
+    background:var(--vault); color:rgba(244,239,226,0.45);
+    padding:2.4rem 0; font-family:var(--mono); font-size:0.74rem;
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:0.8rem;
+    letter-spacing:0.02em;
+  }
+  .site-footer a{ color:rgba(244,239,226,0.7); text-decoration:none; border-bottom:1px solid rgba(244,239,226,0.25); }
+  .site-footer a:hover{ color:var(--brass); border-color:var(--brass); }
+
+  @media (max-width:640px){
+    .hero{ padding:6rem 0 3.5rem; }
+    .premise, .strata, .chapters, .excerpts, .review-cta, .author{ padding-top:4rem; padding-bottom:4rem; }
+    .ledger-row{ grid-template-columns:2.4rem 1fr; row-gap:0.6rem; }
+    .ledger-row .pill{ grid-column:1 / -1; justify-self:start; }
+    .band-base{ max-width:100%; }
+    .band-mid{ max-width:88%; }
+    .band-upper{ max-width:72%; }
+    .author-card{ flex-direction:column; }
+    .site-footer{ flex-direction:column; text-align:left; }
+  }
+</style>
+</head>
+<body>
+
+  <header class="mini-nav" id="miniNav">
+    <div class="mark">The NBFC <span>Ledger</span></div>
+    <a class="btn btn-brass" href="https://kmb.vipulanand.in/nbfc/chapter3/" target="_blank" rel="noopener">Review Ch. 3</a>
+  </header>
+
+  <main>
+
+    <section class="hero" id="top">
+      <div class="wrap">
+        <div class="eyebrow">Manuscript · Review Edition · 2026</div>
+        <h1>The NBFC<br><em>Ledger</em></h1>
+        <p class="tagline">A field guide to India's regulated credit markets — for investors done choosing between a 7% bank FD and a stock-market gamble.</p>
+        <div class="cta-row">
+          <a class="btn btn-brass" href="https://kmb.vipulanand.in/nbfc/chapter3/" target="_blank" rel="noopener">Review Chapter 3 →</a>
+          <a class="btn btn-ghost" href="#premise">Read the premise ↓</a>
+        </div>
+        <div class="status-line"><span class="dot">●</span> Chapter 3 is live for peer review · other chapters in manuscript</div>
+      </div>
+    </section>
+
+    <section class="premise" id="premise">
+      <div class="wrap reveal">
+        <div class="eyebrow">The premise</div>
+        <h2>Two bad options, and a third nobody mentions</h2>
+        <p class="lede">Lock your money in a Fixed Deposit and watch inflation quietly eat it — or throw it at the stock market and hope.</p>
+        <p>For decades, that's been the entire menu handed to young Indian investors. This book argues there's a third arena, one where institutional money already parks its cash — hiding in plain sight inside every Demat account most people already have open.</p>
+        <p>It starts with defense: learning to strip the marketing off a shiny new fintech app, cross-check it against the RBI's Master Registry, and recognize that an 18% "guaranteed" return is a warning label, not a bargain.</p>
+        <div class="flag">⚠ 18% guaranteed returns are the tell, not the pitch</div>
+        <p>Then it turns to offense. Chapter 3 is where the book walks into the RBI's Upper and Middle Layer institutions — the titans that don't just lend money, they borrow it — and shows exactly how a retail investor lends to them directly.</p>
+      </div>
+    </section>
+
+    <section class="strata" id="strata">
+      <div class="wrap reveal">
+        <div class="eyebrow">The regulatory ladder</div>
+        <h2>Where the apex begins</h2>
+        <p class="sub">The RBI sorts India's 9,075 registered NBFCs into layers by systemic weight. Most of the noise — and most of the risk — sits at the bottom. Chapter 3 hunts at the top.</p>
+
+        <div class="pyramid">
+          <div class="band band-base">
+            <div class="label">Base Layer</div>
+            <div class="figure">8,633 Investment &amp; Credit Companies</div>
+            <div class="names">small, hyper-local, lightly supervised</div>
+          </div>
+          <div class="band band-mid">
+            <div class="label">Middle Layer</div>
+            <div class="figure">Moderately regulated NBFCs</div>
+            <div class="names">larger balance sheets, closer RBI oversight</div>
+          </div>
+          <div class="band band-upper">
+            <div class="label">Upper Layer — the apex</div>
+            <div class="figure">Bajaj Finance · Aditya Birla Capital · Cholamandalam</div>
+            <div class="names">issue NCDs directly to the public</div>
+            <a class="apex-link" href="#review">Chapter 3 hunts here →</a>
+          </div>
+        </div>
+        <div class="apex-caption">of 9,075 registered NBFCs, only a handful sit in the Upper Layer</div>
+      </div>
+    </section>
+
+    <section class="chapters" id="chapters">
+      <div class="wrap reveal">
+        <div class="eyebrow">The ledger</div>
+        <h2>Manuscript, chapter by chapter</h2>
+        <div class="ledger">
+          <div class="ledger-row">
+            <div class="folio">01</div>
+            <div>
+              <div class="theme-name">Separating regulated NBFCs from fintech traps</div>
+              <div class="theme-desc">Reading past the marketing, and knowing what "registered" actually means.</div>
+            </div>
+            <span class="pill">In manuscript</span>
+          </div>
+          <div class="ledger-row">
+            <div class="folio">02</div>
+            <div>
+              <div class="theme-name">The RBI Master Registry</div>
+              <div class="theme-desc">Verifying, in five minutes, who actually holds your capital.</div>
+            </div>
+            <span class="pill">In manuscript</span>
+          </div>
+          <div class="ledger-row">
+            <div class="folio">03</div>
+            <div>
+              <div class="theme-name">Strategic Capital Allocation — Hunting in the Apex</div>
+              <div class="theme-desc">Escaping the 7% trap through Upper Layer NCDs, using a Demat account you already have.</div>
+            </div>
+            <a class="pill pill-open" href="https://kmb.vipulanand.in/nbfc/chapter3/" target="_blank" rel="noopener">Open for review →</a>
+          </div>
+          <div class="ledger-row">
+            <div class="folio">04+</div>
+            <div>
+              <div class="theme-name">Building the ladder</div>
+              <div class="theme-desc">More chapters in progress.</div>
+            </div>
+            <span class="pill">In progress</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="excerpts" id="excerpts">
+      <div class="wrap reveal">
+        <div class="eyebrow">From the manuscript</div>
+        <h2>A sneak peek at Chapter 3</h2>
+
+        <div class="quote-block quote-big">
+          <p>"The Demat Account is a Vault, Not a Casino."</p>
+          <div class="attr">— section heading, Chapter 3</div>
+        </div>
+
+        <div class="quote-block">
+          <p>"Millions of retail investors are using their Demat accounts to gamble on volatile small-cap stocks. Institutional investors are using those exact same accounts to hold something far more predictable: Apex Debt."</p>
+          <div class="attr">— Chapter 3</div>
+        </div>
+
+        <div class="quote-block">
+          <p>"By utilizing your Demat account properly, you can buy the debt of these Upper-Layer NBFCs and lock in yields of 9% to 10%+. You are stepping over the middleman — and lending directly to the institutions that drive the economy."</p>
+          <div class="attr">— Chapter 3</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="review-cta" id="review">
+      <div class="wrap reveal">
+        <div class="eyebrow">Peer review</div>
+        <h2>Chapter 3 is open for review</h2>
+        <p>The chapter lives on a working review page. Click any paragraph to leave a note, then export your feedback as JSON when you're done.</p>
+        <a class="btn btn-ink" href="https://kmb.vipulanand.in/nbfc/chapter3/" target="_blank" rel="noopener" style="padding:0.85rem 1.6rem; font-size:0.85rem;">Open Chapter 3 for review →</a>
+        <div class="steps">
+          <div><span>1.</span> Enable review mode</div>
+          <div><span>2.</span> Click a paragraph, leave a note</div>
+          <div><span>3.</span> Export edits as JSON</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="author" id="author">
+      <div class="wrap reveal">
+        <div class="eyebrow">About the author</div>
+        <div class="author-card">
+          <div class="author-mark">A</div>
+          <div>
+            <p>[Your name] is an independent operator who spent the past year doing exactly what this book teaches — checking RBI registries by hand, pulling CRISIL ratings before trusting a fund manager's pitch, and building an income architecture out of verified instruments instead of promises. The Apex Ledger is that process, written down.</p>
+            <div class="placeholder-note">Placeholder draft — tell me what you'd like featured here (name, a photo, credentials) and I'll swap it in.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div>© 2026 The NBFC Ledger · manuscript in progress</div>
+    <div><a href="https://kmb.vipulanand.in/nbfc/chapter3/" target="_blank" rel="noopener">kmb.vipulanand.in/nbfc/chapter3</a></div>
+  </footer>
+
+  <script>
+    // Sticky mini-nav after hero
+    const nav = document.getElementById('miniNav');
+    const hero = document.getElementById('top');
+    const navObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => nav.classList.toggle('visible', !e.isIntersecting));
+    }, { threshold: 0, rootMargin: '-10% 0px 0px 0px' });
+    navObserver.observe(hero);
+
+    // Scroll reveal
+    const revealEls = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in-view');
+          revealObserver.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    revealEls.forEach(el => revealObserver.observe(el));
+  </script>
+
+</body>
+</html>
