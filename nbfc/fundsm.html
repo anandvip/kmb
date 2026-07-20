@@ -168,7 +168,7 @@
     <div class="wrap">
       <div class="eyebrow">Governance · Compensation Declaration</div>
       <h1>The Draw <em>Ledger</em></h1>
-      <p>One declared structure. Every month. No undefined lump sum, ever.</p>
+      <p>One declared structure. Clearly defined. No undefined lump sum, ever.</p>
     </div>
   </div>
 
@@ -213,18 +213,14 @@
         <label class="structure-option" data-value="markup">
           <input type="radio" name="structure" value="markup">
           <div>
-            <div class="opt-title">Markup</div>
-            <div class="opt-desc">A fixed percentage added on top of a defined base, drawn monthly.</div>
+            <div class="opt-title">Markup — per investment</div>
+            <div class="opt-desc">A percentage of each investment's size, charged at the time that investment is made — not a recurring monthly draw.</div>
             <div class="opt-fields">
               <div class="field">
                 <label for="markupPct">Markup</label>
                 <input type="text" inputmode="decimal" id="markupPct" placeholder="0" disabled>
               </div>
-              <span class="suffix">%</span>
-              <div class="field" style="flex:1; min-width:10rem;">
-                <label for="markupBase">Applied on</label>
-                <input type="text" id="markupBase" placeholder="e.g. capital deployed" disabled>
-              </div>
+              <span class="suffix">% of each investment's size, per transaction</span>
             </div>
           </div>
         </label>
@@ -249,7 +245,7 @@
         <legend>Guardrail</legend>
         <div class="guardrail-note">
           <span class="mark">⚠</span>
-          <span>This declaration authorizes recurring monthly compensation only, under exactly one structure above. It does not authorize an undefined or lump-sum withdrawal in a single transaction, under any circumstance. Any change to the structure or amount requires a new dated declaration.</span>
+          <span>This declaration authorizes exactly one defined structure above — a fixed monthly draw, a percentage of monthly earnings, or a markup charged per investment based on its size. It does not authorize an undefined or arbitrary lump-sum withdrawal at any time, under any circumstance. Any change to the structure or amount requires a new dated declaration.</span>
         </div>
         <label class="ack-row">
           <input type="checkbox" id="ackBox">
@@ -292,7 +288,6 @@
   const options = document.querySelectorAll('.structure-option');
   const fixedAmount = document.getElementById('fixedAmount');
   const markupPct = document.getElementById('markupPct');
-  const markupBase = document.getElementById('markupBase');
   const earningsPct = document.getElementById('earningsPct');
   const ackBox = document.getElementById('ackBox');
   const exportBtn = document.getElementById('exportBtn');
@@ -327,7 +322,7 @@
 
   const fieldsByValue = {
     fixed: [fixedAmount],
-    markup: [markupPct, markupBase],
+    markup: [markupPct],
     percent: [earningsPct]
   };
 
@@ -353,16 +348,20 @@
   function updateSummary(){
     const structure = currentStructure();
     const mgrName = document.getElementById('mgrName').value.trim();
+    const sebi = mgrSebi.value.trim();
     const effMonth = document.getElementById('effMonth').value;
 
     let line = null;
+    let cadence = null;
     if (structure === 'fixed' && fixedAmount.value){
-      line = `₹${fixedAmount.value} / month — fixed take-home, recurring`;
+      line = `₹${fixedAmount.value} / month — fixed take-home`;
+      cadence = 'Monthly, recurring';
     } else if (structure === 'markup' && markupPct.value){
-      const base = markupBase.value.trim() || 'undefined base';
-      line = `${markupPct.value}% markup on ${base} — recurring monthly`;
+      line = `${markupPct.value}% markup, charged per investment`;
+      cadence = 'Per investment, based on size — not monthly';
     } else if (structure === 'percent' && earningsPct.value){
-      line = `${earningsPct.value}% of net monthly earnings — recurring, zero on flat months`;
+      line = `${earningsPct.value}% of net monthly earnings`;
+      cadence = 'Monthly, recurring — zero on flat months';
     }
 
     const ready = structure && line && mgrName && ackBox.checked;
@@ -377,7 +376,9 @@
     summaryOut.className = 'summary-line';
     summaryOut.innerHTML =
       `<span class="k">Declarant</span> ${mgrName || '—'}<br>` +
+      `<span class="k">SEBI Reg. No.</span> ${sebi || '—'}<br>` +
       `<span class="k">Structure</span> ${line}<br>` +
+      `<span class="k">Cadence</span> ${cadence}<br>` +
       `<span class="k">Effective</span> ${effMonth || '—'}<br>` +
       `<span class="k">Lump sum authorized</span> no`;
   }
@@ -385,12 +386,13 @@
   options.forEach(opt => {
     opt.querySelector('input[type=radio]').addEventListener('change', onStructureChange);
   });
-  [fixedAmount, markupPct, markupBase, earningsPct, ackBox].forEach(el => {
+  [fixedAmount, markupPct, earningsPct, ackBox].forEach(el => {
     el.addEventListener('input', updateSummary);
     el.addEventListener('change', updateSummary);
   });
   document.getElementById('mgrName').addEventListener('input', updateSummary);
   document.getElementById('effMonth').addEventListener('input', updateSummary);
+  mgrSebi.addEventListener('input', updateSummary);
 
   document.getElementById('printBtn').addEventListener('click', () => {
     if (!validateSebi(true)){
@@ -422,7 +424,6 @@
       structure: structure,
       fixedMonthlyAmount: structure === 'fixed' ? fixedAmount.value : null,
       markupPercent: structure === 'markup' ? markupPct.value : null,
-      markupBase: structure === 'markup' ? markupBase.value.trim() : null,
       earningsPercent: structure === 'percent' ? earningsPct.value : null,
       lumpSumAuthorized: false,
       acknowledged: ackBox.checked,
