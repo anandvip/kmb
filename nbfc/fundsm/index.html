@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Draw Ledger — Fund Manager Compensation Declaration</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --vault:#14171B; --vault-soft:#1D2126; --vault-line: rgba(237,230,213,0.10);
+    --paper:#EDE6D5; --paper-soft:#E3DBC5; --paper-line: rgba(36,32,25,0.14);
+    --ink:#242019; --ink-soft:#5A5346; --off:#F4EFE2;
+    --brass:#BE8F4E; --brass-deep:#8C6A38; --verdigris:#71917C; --rust:#A24E39;
+    --serif:"Fraunces", Georgia, serif;
+    --sans:"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --mono:"IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; font-family:var(--sans); background:var(--paper); color:var(--ink); -webkit-font-smoothing:antialiased; }
+  a{ color:inherit; }
+  ::selection{ background:var(--brass); color:var(--vault); }
+  :focus-visible{ outline:2px solid var(--brass); outline-offset:3px; }
+  .wrap{ max-width:760px; margin:0 auto; padding:0 1.75rem; }
+  .eyebrow{ font-family:var(--mono); font-size:0.72rem; letter-spacing:0.16em; text-transform:uppercase; font-weight:500; }
+
+  /* header band */
+  .band{ background:var(--vault); color:var(--off); padding:4rem 0 3.2rem; border-bottom:1px solid var(--vault-line); }
+  .band .eyebrow{ color:var(--brass); margin-bottom:1rem; }
+  .band h1{ font-family:var(--serif); font-weight:600; font-size:clamp(2.1rem,5vw,3.2rem); margin:0 0 0.8rem; line-height:1.05; }
+  .band h1 em{ font-style:italic; font-weight:400; color:var(--brass); }
+  .band p{ font-size:1.02rem; line-height:1.6; color:rgba(244,239,226,0.75); max-width:32rem; margin:0; }
+
+  main{ padding:3.2rem 0 5rem; }
+
+  .intro-note{
+    font-family:var(--serif); font-style:italic; font-size:1.15rem; line-height:1.6;
+    color:var(--ink-soft); border-left:2px solid var(--brass); padding-left:1.4rem;
+    margin-bottom:3rem; max-width:34rem;
+  }
+
+  fieldset{ border:none; margin:0 0 3rem; padding:0; }
+  legend{
+    font-family:var(--mono); font-size:0.74rem; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--brass-deep); font-weight:600; padding:0 0 1rem; margin-bottom:1.2rem;
+    border-bottom:1px solid var(--paper-line); width:100%;
+  }
+
+  /* ledger row: label + input */
+  .ledger-row{
+    display:grid; grid-template-columns:12rem 1fr; gap:1rem; align-items:center;
+    padding:0.9rem 0; border-bottom:1px solid var(--paper-line);
+  }
+  .ledger-row label{ font-family:var(--mono); font-size:0.82rem; color:var(--ink-soft); }
+  .ledger-row input[type=text], .ledger-row input[type=date], .ledger-row input[type=month]{
+    width:100%; border:none; border-bottom:1px solid var(--paper-line); background:transparent;
+    font-family:var(--sans); font-size:1rem; color:var(--ink); padding:0.4rem 0.1rem;
+    transition:border-color .2s ease;
+  }
+  .ledger-row input:focus{ border-color:var(--brass); }
+  .ledger-row .req{ color:var(--rust); font-weight:700; margin-left:0.15rem; }
+  .ledger-row input.invalid{ border-color:var(--rust); }
+  .field-error{
+    display:none; font-family:var(--mono); font-size:0.72rem; color:var(--rust);
+    margin-top:0.35rem;
+  }
+  .field-error.visible{ display:block; }
+
+  /* compensation structure cards */
+  .structure-option{
+    display:grid; grid-template-columns:1.4rem 1fr; gap:0.9rem; align-items:start;
+    padding:1.1rem 1rem; margin-bottom:0.8rem; border:1px solid var(--paper-line); border-radius:5px;
+    cursor:pointer; transition:border-color .2s ease, background .2s ease;
+    background:var(--paper-soft);
+  }
+  .structure-option.selected{ border-color:var(--brass); background:#F6EFDD; }
+  .structure-option input[type=radio]{ margin-top:0.25rem; accent-color:var(--brass-deep); width:1.05rem; height:1.05rem; }
+  .structure-option .opt-title{ font-family:var(--serif); font-weight:600; font-size:1.08rem; margin:0 0 0.25rem; }
+  .structure-option .opt-desc{ font-size:0.88rem; color:var(--ink-soft); line-height:1.5; margin:0 0 0.7rem; }
+  .opt-fields{ display:flex; gap:0.8rem; flex-wrap:wrap; align-items:center; }
+  .opt-fields .field{ display:flex; flex-direction:column; gap:0.25rem; }
+  .opt-fields label{ font-family:var(--mono); font-size:0.68rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--ink-soft); }
+  .opt-fields input{
+    border:none; border-bottom:1px solid var(--paper-line); background:transparent; font-family:var(--mono);
+    font-size:0.98rem; color:var(--ink); padding:0.3rem 0.1rem; width:9rem;
+  }
+  .opt-fields input:disabled{ color:var(--ink-soft); opacity:0.4; border-color:transparent; }
+  .opt-fields input:enabled:focus{ border-color:var(--brass); }
+  .opt-fields .suffix{ font-family:var(--mono); font-size:0.85rem; color:var(--ink-soft); }
+
+  /* guardrail */
+  .guardrail-note{
+    display:flex; gap:0.7rem; align-items:flex-start;
+    font-size:0.92rem; line-height:1.6; color:var(--ink-soft);
+    background:rgba(162,78,57,0.06); border:1px solid rgba(162,78,57,0.25); border-radius:5px;
+    padding:1rem 1.1rem; margin-bottom:1.4rem;
+  }
+  .guardrail-note .mark{ color:var(--rust); font-weight:700; font-family:var(--mono); }
+  .ack-row{ display:flex; gap:0.7rem; align-items:flex-start; font-size:0.9rem; line-height:1.55; }
+  .ack-row input{ margin-top:0.3rem; accent-color:var(--brass-deep); width:1.05rem; height:1.05rem; flex-shrink:0; }
+
+  /* signatures */
+  .sig-grid{ display:grid; grid-template-columns:1fr 1fr; gap:2.2rem; }
+  .sig-block{ display:flex; flex-direction:column; gap:0.4rem; }
+  .sig-line{ border-bottom:1px solid var(--ink); height:2.6rem; }
+  .sig-label{ font-family:var(--mono); font-size:0.72rem; color:var(--ink-soft); letter-spacing:0.04em; }
+
+  /* summary receipt */
+  .summary-panel{
+    background:var(--vault); color:var(--off); border-radius:6px; padding:1.6rem 1.7rem;
+    margin:1rem 0 2.6rem; border:1px solid var(--vault-line);
+  }
+  .summary-panel .eyebrow{ color:var(--verdigris); margin-bottom:0.9rem; }
+  .summary-line{ font-family:var(--mono); font-size:0.92rem; line-height:1.9; color:rgba(244,239,226,0.9); }
+  .summary-line .k{ color:rgba(244,239,226,0.5); }
+  .summary-empty{ font-family:var(--mono); font-size:0.85rem; color:rgba(244,239,226,0.4); font-style:italic; }
+
+  /* actions */
+  .actions{ display:flex; gap:0.9rem; flex-wrap:wrap; }
+  .btn{
+    font-family:var(--mono); font-size:0.78rem; letter-spacing:0.05em; text-transform:uppercase;
+    font-weight:500; padding:0.8rem 1.3rem; border-radius:3px; border:1px solid transparent;
+    cursor:pointer; transition:background .2s ease, color .2s ease, border-color .2s ease, transform .15s ease;
+  }
+  .btn:hover{ transform:translateY(-1px); }
+  .btn:disabled{ opacity:0.4; cursor:not-allowed; transform:none; }
+  .btn-brass{ background:var(--brass); color:var(--vault); }
+  .btn-brass:hover:not(:disabled){ background:var(--brass-deep); }
+  .btn-ghost{ border-color:var(--paper-line); color:var(--ink-soft); background:transparent; }
+  .btn-ghost:hover{ border-color:var(--ink-soft); color:var(--ink); }
+
+  footer{ padding:2rem 0 3rem; font-family:var(--mono); font-size:0.72rem; color:var(--ink-soft); line-height:1.6; }
+
+  /* toast */
+  .toast{
+    position:fixed; left:50%; bottom:1.6rem; transform:translateX(-50%) translateY(16px);
+    background:var(--rust); color:var(--off); font-family:var(--mono); font-size:0.82rem;
+    padding:0.85rem 1.25rem; border-radius:5px; box-shadow:0 14px 34px -12px rgba(0,0,0,0.45);
+    opacity:0; pointer-events:none; transition:opacity .25s ease, transform .25s ease;
+    z-index:200; max-width:min(90vw, 24rem); line-height:1.5;
+  }
+  .toast.visible{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+  @media print{
+    .band{ background:none; color:var(--ink); border-bottom:2px solid var(--ink); padding:1rem 0; }
+    .band .eyebrow{ color:var(--ink-soft); }
+    .band h1 em{ color:var(--ink); }
+    .band p{ color:var(--ink-soft); }
+    .summary-panel{ background:none; color:var(--ink); border:1px solid var(--ink); }
+    .summary-panel .eyebrow{ color:var(--ink-soft); }
+    .summary-line{ color:var(--ink); }
+    .summary-line .k{ color:var(--ink-soft); }
+    .actions{ display:none; }
+    .structure-option{ break-inside:avoid; }
+    .toast, .field-error{ display:none !important; }
+  }
+
+  @media (max-width:600px){
+    .ledger-row{ grid-template-columns:1fr; gap:0.3rem; }
+    .sig-grid{ grid-template-columns:1fr; gap:1.6rem; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="band">
+    <div class="wrap">
+      <div class="eyebrow">Governance · Compensation Declaration</div>
+      <h1>The Draw <em>Ledger</em></h1>
+      <p>One declared structure. Clearly defined. No undefined lump sum, ever.</p>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <p class="intro-note">"A draw is what you take on a schedule you named in advance. Anything else is a withdrawal nobody agreed to."</p>
+
+    <form id="declarationForm">
+
+      <fieldset>
+        <legend>Declarant details</legend>
+        <div class="ledger-row"><label for="mgrName">Fund manager name</label><input type="text" id="mgrName" placeholder="Full name"></div>
+        <div class="ledger-row"><label for="mgrFirm">PMS / AMC name</label><input type="text" id="mgrFirm" placeholder="Firm or entity"></div>
+        <div class="ledger-row">
+          <label for="mgrSebi">SEBI registration no. <span class="req">*</span></label>
+          <div>
+            <input type="text" id="mgrSebi" placeholder="Required" required aria-required="true">
+            <div class="field-error" id="sebiError">SEBI registration no. is required.</div>
+          </div>
+        </div>
+        <div class="ledger-row"><label for="declDate">Declaration date</label><input type="date" id="declDate"></div>
+        <div class="ledger-row"><label for="effMonth">Effective from</label><input type="month" id="effMonth"></div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Compensation structure — choose exactly one</legend>
+
+        <label class="structure-option" data-value="fixed">
+          <input type="radio" name="structure" value="fixed">
+          <div>
+            <div class="opt-title">Fixed monthly take-home</div>
+            <div class="opt-desc">A set amount drawn every month, regardless of performance.</div>
+            <div class="opt-fields">
+              <div class="field">
+                <label for="fixedAmount">Amount</label>
+                <input type="text" inputmode="decimal" id="fixedAmount" placeholder="0" disabled>
+              </div>
+              <span class="suffix">₹ / month</span>
+            </div>
+          </div>
+        </label>
+
+        <label class="structure-option" data-value="markup">
+          <input type="radio" name="structure" value="markup">
+          <div>
+            <div class="opt-title">Markup — per investment</div>
+            <div class="opt-desc">A percentage of each investment's size, charged at the time that investment is made — not a recurring monthly draw.</div>
+            <div class="opt-fields">
+              <div class="field">
+                <label for="markupPct">Markup</label>
+                <input type="text" inputmode="decimal" id="markupPct" placeholder="0" disabled>
+              </div>
+              <span class="suffix">% of each investment's size, per transaction</span>
+            </div>
+          </div>
+        </label>
+
+        <label class="structure-option" data-value="percent">
+          <input type="radio" name="structure" value="percent">
+          <div>
+            <div class="opt-title">Percentage of monthly earnings</div>
+            <div class="opt-desc">A share of the net returns actually generated that month — zero if the month is flat or negative.</div>
+            <div class="opt-fields">
+              <div class="field">
+                <label for="earningsPct">Share</label>
+                <input type="text" inputmode="decimal" id="earningsPct" placeholder="0" disabled>
+              </div>
+              <span class="suffix">% of net monthly earnings</span>
+            </div>
+          </div>
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Guardrail</legend>
+        <div class="guardrail-note">
+          <span class="mark">⚠</span>
+          <span>This declaration authorizes exactly one defined structure above — a fixed monthly draw, a percentage of monthly earnings, or a markup charged per investment based on its size. It does not authorize an undefined or arbitrary lump-sum withdrawal at any time, under any circumstance. Any change to the structure or amount requires a new dated declaration.</span>
+        </div>
+        <label class="ack-row">
+          <input type="checkbox" id="ackBox">
+          <span>I, the declarant named above, confirm this is the sole and complete basis for my compensation from this account, and that I am not authorized to draw any amount outside it.</span>
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Summary</legend>
+        <div class="summary-panel">
+          <div class="eyebrow">Declared entry</div>
+          <div id="summaryOut" class="summary-empty">Fill in the fields above to generate the ledger entry.</div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Signatures</legend>
+        <div class="sig-grid">
+          <div class="sig-block"><div class="sig-line"></div><div class="sig-label">Fund manager — signature &amp; date</div></div>
+          <div class="sig-block"><div class="sig-line"></div><div class="sig-label">Client — countersignature &amp; date</div></div>
+        </div>
+      </fieldset>
+
+      <div class="actions">
+        <button type="button" class="btn btn-brass" id="exportBtn" disabled>Export declaration (JSON)</button>
+        <button type="button" class="btn btn-ghost" id="printBtn">Print / save as PDF</button>
+        <button type="button" class="btn btn-ghost" id="clearBtn">Clear form</button>
+      </div>
+    </form>
+  </main>
+
+  <footer>
+    <div class="wrap">This is a governance template, not a binding legal instrument — have it reviewed before use in an actual fee agreement.</div>
+  </footer>
+
+  <div class="toast" id="toast" role="alert" aria-live="assertive"></div>
+
+<script>
+  const form = document.getElementById('declarationForm');
+  const options = document.querySelectorAll('.structure-option');
+  const fixedAmount = document.getElementById('fixedAmount');
+  const markupPct = document.getElementById('markupPct');
+  const earningsPct = document.getElementById('earningsPct');
+  const ackBox = document.getElementById('ackBox');
+  const exportBtn = document.getElementById('exportBtn');
+  const summaryOut = document.getElementById('summaryOut');
+  const mgrSebi = document.getElementById('mgrSebi');
+  const sebiError = document.getElementById('sebiError');
+  const toast = document.getElementById('toast');
+  let toastTimer;
+
+  function showToast(message){
+    toast.textContent = message;
+    toast.classList.add('visible');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('visible'), 3200);
+  }
+
+  function validateSebi(showError){
+    const valid = mgrSebi.value.trim().length > 0;
+    if (showError){
+      mgrSebi.classList.toggle('invalid', !valid);
+      sebiError.classList.toggle('visible', !valid);
+    }
+    return valid;
+  }
+
+  mgrSebi.addEventListener('input', () => {
+    if (mgrSebi.value.trim()){
+      mgrSebi.classList.remove('invalid');
+      sebiError.classList.remove('visible');
+    }
+  });
+
+  const fieldsByValue = {
+    fixed: [fixedAmount],
+    markup: [markupPct],
+    percent: [earningsPct]
+  };
+
+  function onStructureChange(){
+    options.forEach(opt => {
+      const val = opt.dataset.value;
+      const radio = opt.querySelector('input[type=radio]');
+      const isSelected = radio.checked;
+      opt.classList.toggle('selected', isSelected);
+      fieldsByValue[val].forEach(f => {
+        f.disabled = !isSelected;
+        if (!isSelected) f.value = '';
+      });
+    });
+    updateSummary();
+  }
+
+  function currentStructure(){
+    const checked = form.querySelector('input[name=structure]:checked');
+    return checked ? checked.value : null;
+  }
+
+  function updateSummary(){
+    const structure = currentStructure();
+    const mgrName = document.getElementById('mgrName').value.trim();
+    const sebi = mgrSebi.value.trim();
+    const effMonth = document.getElementById('effMonth').value;
+
+    let line = null;
+    let cadence = null;
+    if (structure === 'fixed' && fixedAmount.value){
+      line = `₹${fixedAmount.value} / month — fixed take-home`;
+      cadence = 'Monthly, recurring';
+    } else if (structure === 'markup' && markupPct.value){
+      line = `${markupPct.value}% markup, charged per investment`;
+      cadence = 'Per investment, based on size — not monthly';
+    } else if (structure === 'percent' && earningsPct.value){
+      line = `${earningsPct.value}% of net monthly earnings`;
+      cadence = 'Monthly, recurring — zero on flat months';
+    }
+
+    const ready = structure && line && mgrName && ackBox.checked;
+    exportBtn.disabled = !ready;
+
+    if (!line){
+      summaryOut.className = 'summary-empty';
+      summaryOut.textContent = 'Fill in the fields above to generate the ledger entry.';
+      return;
+    }
+
+    summaryOut.className = 'summary-line';
+    summaryOut.innerHTML =
+      `<span class="k">Declarant</span> ${mgrName || '—'}<br>` +
+      `<span class="k">SEBI Reg. No.</span> ${sebi || '—'}<br>` +
+      `<span class="k">Structure</span> ${line}<br>` +
+      `<span class="k">Cadence</span> ${cadence}<br>` +
+      `<span class="k">Effective</span> ${effMonth || '—'}<br>` +
+      `<span class="k">Lump sum authorized</span> no`;
+  }
+
+  options.forEach(opt => {
+    opt.querySelector('input[type=radio]').addEventListener('change', onStructureChange);
+  });
+  [fixedAmount, markupPct, earningsPct, ackBox].forEach(el => {
+    el.addEventListener('input', updateSummary);
+    el.addEventListener('change', updateSummary);
+  });
+  document.getElementById('mgrName').addEventListener('input', updateSummary);
+  document.getElementById('effMonth').addEventListener('input', updateSummary);
+  mgrSebi.addEventListener('input', updateSummary);
+
+  document.getElementById('printBtn').addEventListener('click', () => {
+    if (!validateSebi(true)){
+      showToast('SEBI registration no. is required before printing.');
+      mgrSebi.focus();
+      mgrSebi.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    window.print();
+  });
+
+  document.getElementById('clearBtn').addEventListener('click', () => {
+    form.reset();
+    options.forEach(opt => opt.classList.remove('selected'));
+    Object.values(fieldsByValue).flat().forEach(f => f.disabled = true);
+    mgrSebi.classList.remove('invalid');
+    sebiError.classList.remove('visible');
+    updateSummary();
+  });
+
+  document.getElementById('exportBtn').addEventListener('click', () => {
+    const structure = currentStructure();
+    const data = {
+      declarant: document.getElementById('mgrName').value.trim(),
+      firm: document.getElementById('mgrFirm').value.trim(),
+      sebiReg: document.getElementById('mgrSebi').value.trim(),
+      declarationDate: document.getElementById('declDate').value,
+      effectiveFrom: document.getElementById('effMonth').value,
+      structure: structure,
+      fixedMonthlyAmount: structure === 'fixed' ? fixedAmount.value : null,
+      markupPercent: structure === 'markup' ? markupPct.value : null,
+      earningsPercent: structure === 'percent' ? earningsPct.value : null,
+      lumpSumAuthorized: false,
+      acknowledged: ackBox.checked,
+      exportedAt: new Date().toISOString()
+    };
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
+    const a = document.createElement('a');
+    a.setAttribute("href", dataStr);
+    a.setAttribute("download", "draw_ledger_declaration.json");
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  });
+
+  // init
+  Object.values(fieldsByValue).flat().forEach(f => f.disabled = true);
+  updateSummary();
+</script>
+
+</body>
+</html>
